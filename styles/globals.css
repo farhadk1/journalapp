@@ -1,9 +1,25 @@
+@tailwind base;
+
+@layer base {
+  html {
+    @apply text-neutral-800;
+  }
+  html.dark {
+    @apply text-neutral-50;
+    @apply bg-neutral-800;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Lora", serif;
+  /* font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
 }
 
 a {
@@ -35,4 +51,80 @@ ul {
 button {
   padding: 0.5rem 1rem;
   font-weight: bold;
+}
+
+.public-DraftStyleDefault-block {
+  line-height: 30px;
+  margin-top: 22px;
+  min-height: 90%;
+  font-size: 22px;
+  display: block;
+  word-wrap: break-word;
+}
+
+ol {
+  list-style-type: circle;
+  padding-left: 27px;
+}
+
+blockquote {
+  font-size: 1.4em;
+  font-style: italic;
+  color: #555555;
+  padding: 1.2em 30px 1.2em 75px;
+  border-left: 8px solid #78c0a8;
+  line-height: 1.6;
+  position: relative;
+  background: #ededed;
+}
+
+.dark blockquote {
+  font-size: 1.4em;
+  font-style: italic;
+  color: #d7d7d7;
+  padding: 1.2em 30px 1.2em 75px;
+  border-left: 8px solid #78c0a8;
+  line-height: 1.6;
+  position: relative;
+  background: #232323;
+}
+
+blockquote::before {
+  font-family: Arial;
+  content: "\201C";
+  color: #78c0a8;
+  font-size: 4em;
+  position: absolute;
+  left: 10px;
+  top: -10px;
+}
+
+blockquote::after {
+  content: "";
+}
+
+blockquote span {
+  display: block;
+  color: #333333;
+  font-style: normal;
+  font-weight: bold;
+  margin-top: 1em;
+}
+.dark blockquote span {
+  display: block;
+  color: #d4d4d4;
+  font-style: normal;
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+.dark,
+.dark input {
+  color: white;
+  background-color: black;
+}
+
+:fullscreen,
+::backdrop {
+  background-color: rgba(255, 255, 255, 0);
 }

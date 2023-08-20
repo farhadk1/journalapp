@@ -6,8 +6,28 @@
     "start": "next start"
   },
   "dependencies": {
+    "@draft-js-plugins/anchor": "^4.2.1",
+    "@draft-js-plugins/editor": "^4.1.4",
+    "@draft-js-plugins/inline-toolbar": "^4.2.1",
+    "@draft-js-plugins/linkify": "^4.2.2",
+    "@draft-js-plugins/side-toolbar": "^5.0.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/material": "^5.14.5",
+    "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
+    "draft-js-export-markdown": "^1.4.0",
+    "draft-js-import-markdown": "^1.4.1",
     "next": "latest",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-full-screen": "^1.1.1",
+    "tw-elements-react": "^1.0.0-alpha1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.28",
+    "tailwindcss": "^3.3.3"
   }
 }

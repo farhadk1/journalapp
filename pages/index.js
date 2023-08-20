@@ -1,115 +1,114 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import React, { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import SideBarTools from "../components/Sidbar";
+import { stateToHTML } from "draft-js-export-html";
+import { stateToMarkdown } from "draft-js-export-markdown";
+// import { TEInput } from "tw-elements-react";
+
+const MyModal = dynamic(() => import("../components/Modal"), {
+  ssr: false,
+});
+const NoSSREditor = dynamic(() => import("../components/Editor"), {
+  ssr: false,
+});
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [showModalFile, setShowModalFile] = useState(false);
+  const [darkToggle, setDarkToggle] = React.useState(false);
+  const [journalState, setJournalState] = useState("empty");
+  const [title, setTitle] = useState("Journal Title");
+  const handle = useFullScreenHandle();
+  const toggleFullScreen = () => {
+    if (handle.active) handle.exit();
+    else handle.enter();
+    // alert("toggle", handle.active);
+  };
+
+  useEffect(() => {
+    // handle.enter();
+  }, [darkToggle]);
+
+  function exportFile(type) {
+    const link = document.createElement("a");
+    if (type == "html") {
+      let html = stateToHTML(journalState.getCurrentContent());
+      const fileData = JSON.stringify(html);
+      const blob = new Blob([fileData], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      link.download = `${title}.html`;
+      link.href = url;
+    } else if (type == "markdown") {
+      const markdown = stateToMarkdown(journalState.getCurrentContent());
+      const fileData = JSON.stringify(markdown);
+      const blob = new Blob([fileData], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      link.download = `${title}.md`;
+      link.href = url;
+    }
+
+    link.click();
+  }
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setTitle(value);
+  };
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <FullScreen handle={handle}>
+      <div
+        className={`flex items-center justify-center h-screen ${
+          darkToggle && "dark"
+        }`}
+      >
+        <SideBarTools
+          toggleDark={() => setDarkToggle(!darkToggle)}
+          toggleFullScreen={toggleFullScreen}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          showModalFile={showModalFile}
+          setShowModalFile={setShowModalFile}
+        />
+        <MyModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          title="Target Word Count"
+        ></MyModal>
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <MyModal
+          showModal={showModalFile}
+          setShowModal={setShowModalFile}
+          title="Save Journal"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+          <button
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mr-2 rounded inline-flex items-center"
+            onClick={() => exportFile("markdown")}
+          >
+            Save Markdown
+          </button>
+          <button
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+            onClick={() => exportFile("html")}
+          >
+            Save HTML
+          </button>
+        </MyModal>
+        <div>
+          <input
+            className="relative top-16 text-5xl"
+            name="title"
+            type="text"
+            value={title}
+            onChange={handleChange}
+          />
+          <NoSSREditor
+            journalState={journalState}
+            setJournalState={setJournalState}
+          />
+        </div>
+      </div>
+    </FullScreen>
+  );
 }
